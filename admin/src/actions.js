@@ -1,9 +1,10 @@
 /* eslint-disable */
 export const SET_GIRLS  = 'SET_GIRLS';
 export const ADD_GIRL  = 'ADD_GIRL';
-//export const GAME_FETCHED = 'GAME_FETCHED';
-//export const GAME_UPDATED = 'GAME_UPDATED';
-//export const GAME_DELETED = 'GAME_DELETED';
+export const GIRL_FETCHED = 'GIRL_FETCHED';
+export const GIRL_UPDATED = 'GIRL_UPDATED';
+export const GIRL_DELETED = 'GIRL_DELETED';
+export const GIRL_PASTED = 'GIRL_PASTED';
 
 function handleResponse(response) {
     if (response.ok) {
@@ -23,13 +24,6 @@ export function setGirls(girls) {
 }
 
 
-export function addGame(girls) {
-    return {
-        type: ADD_GAME,
-        girls
-    }
-}
-
 export function girlFetched(girl) {
   return {
     type: GIRL_FETCHED,
@@ -37,41 +31,17 @@ export function girlFetched(girl) {
   }
 }
 
-export function girlsDeleted(girlsId) {
+export function girlDeleted(girlId) {
     return {
-        type: GAME_DELETED,
-        girlsId
+        type: GIRL_DELETED,
+        girlId
     }
 }
 
-export function girlsUpdated(girls) {
+export function girlUpdated(girl) {
     return {
-        type: GAME_UPDATED,
-        girls
-    }
-}
-
-export function deleteGame(id) {
-    return dispatch => {
-        return fetch(`/api/girlss/${id}`, {
-           method: 'delete',
-           headers: {
-               "Content-Type" : "application/json"
-           }
-        }) .then(handleResponse)
-        .then(data => dispatch(girlsDeleted(id)));   
-    }
-}
-
-export function updateGame(data) {
-    return dispatch => {
-        return fetch(`/api/girlss/${data._id}`, {
-           method: 'put',
-           body: JSON.stringify(data),
-           headers: {
-               "Content-Type" : "application/json"
-           }
-        }) .then(handleResponse).then(data => dispatch(addGame(data.girls)));   
+        type: GIRL_UPDATED,
+        girl
     }
 }
 
@@ -79,6 +49,54 @@ export function addGirl(girl) {
     return {
         type: ADD_GIRL,
         girl
+    }
+}
+
+export function girlPasted(girl) {
+    return {
+        type: GIRL_PASTED,
+        girl
+    }
+}
+
+
+export function deleteGirl(id) {
+    return dispatch => {
+        return fetch(`/db/girls/${id}`, {
+           method: 'delete',
+           headers: {
+               "Content-Type" : "application/json"
+           }
+        }) 
+        .then(handleResponse)
+        .then(data => dispatch(girlDeleted(id)));   
+    }
+}
+
+
+export function copyGirl(data) {
+    return dispatch => {
+        return fetch('/db/girls', {
+           method: 'post',
+           body: JSON.stringify(data),
+           headers: {
+               "Content-Type" : "application/json"
+           }
+        }).then(handleResponse).then(data => dispatch(girlPasted(data.girl)));
+    }
+    
+}
+
+export function updateGirl(data) {
+    return dispatch => {
+        return fetch(`/db/girls/${data._id}`, {
+           method: 'put',
+           body: JSON.stringify(data),
+           headers: {
+               "Content-Type" : "application/json"
+           }
+        }) .then(handleResponse)
+        .then(data => dispatch(girlUpdated(data.girl)));   
     }
 }
 
@@ -90,7 +108,7 @@ export function saveGirl(data) {
            headers: {
                "Content-Type" : "application/json"
            }
-        }).then(console.log(data)).then(handleResponse).then(data => dispatch(addGirl(data.girls)));   
+        }).then(handleResponse).then(data => dispatch(addGirl(data.girl)));   
     }
 }
 

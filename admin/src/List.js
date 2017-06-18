@@ -1,17 +1,20 @@
 /* eslint-disable */
 import React from 'react';
 import { connect } from 'react-redux';
-//import GamesList from './GamesList.js';
 import GirlItem from './GirlItem.js';
-import { fetchGirls, deleteGame } from './actions';
+import { fetchGirls, deleteGirl, copyGirl } from './actions';
 
 
 class List extends React.Component {
     
     componentDidMount() {
-        this.props.fetchGirls();
-        
+    this.props.fetchGirls();
     }
+    
+    componentWillReceive() {
+        //console.log(this.props.copyGirl);
+    }
+
     render() {
         
         const emptyMessage = (
@@ -19,16 +22,17 @@ class List extends React.Component {
     );
     
         const gamesList = (
-            <div className="ui four cards">
-                {this.props.girls.map((girl) => <GirlItem girl={girl} key={girl._id} />)}
+            <div className="row">
+                {this.props.girls.map((girl) => <GirlItem girl={girl} key={girl._id} deleteGirl={this.props.deleteGirl} copyGirl={this.props.copyGirl} />)}
             </div>
         );
-        console.log(this.props.girls);
+        
         return(
+            
             <div>
                 <div>
-                
-                {this.props.girls.length === 0 ? emptyMessage : gamesList }
+                {console.log(this.props.copyGirl)}
+                { !!this.props.girls ? gamesList : emptyMessage }
                 </div>
             </div>    
         );
@@ -38,7 +42,7 @@ class List extends React.Component {
 List.propTypes = {
     girls: React.PropTypes.array.isRequired,
     fetchGirls: React.PropTypes.func.isRequired,
-    deleteGame: React.PropTypes.func.isRequired
+    //deleteGame: React.PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
@@ -47,4 +51,5 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {fetchGirls, deleteGame})(List);
+export default connect(mapStateToProps, {fetchGirls, deleteGirl, copyGirl })(List);
+

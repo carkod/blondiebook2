@@ -3,58 +3,58 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { fetchGirl, saveGirl } from './actions';
+import { fetchGirl, saveGirl, updateGirl } from './actions';
 
 import GirlDetails from './GirlDetails.js';
 
 class Detail extends React.Component {
-    
-    
+
     state = {
-        redirect:false
+        done:false,
     }
-    
     
     componentDidMount() {
-        
-     /*if (this.props.params._id) {
-       match.fetchGame(this.props.params._id);
-     }*/
+        if (this.props.match.params._id) {
+         this.props.fetchGirl(this.props.match.params._id);
+     }
+     
     }
     
-    /*
-    saveGame = ({_id, title, cover }) =>  {
+    saveGirl = ({ _id, name, cover, country, city }) =>  {
     if(_id) {
-        return this.props.updateGame({ _id, title, cover }).then(
-            () => { this.setState({ redirect: true })}
-        );
+        return this.props.updateGirl({ _id, name, cover, country, city }).then(
+            () => console.log(this.props),
+            () => { this.setState({ done: true })}
+        )
         } else {
-        return this.props.saveGame({ title, cover}).then(
-            () => { this.setState({ redirect: true })}
+            
+        return this.props.saveGirl({ name, cover, country, city }).then(
+            () => { this.setState({ done: true })}
                 
             );
         };
-    }*/
-    
+    }
+   
     render() {
-        console.log(this.props.match.params)
         return (
             <div>
-               { this.props.match.params._id === 'new' ? <GirlDetails girl={this.props.girl} saveGirl={this.props.saveGirl} /> : '' }
+               { this.state.done ? <Redirect to="/vk" /> : <GirlDetails girl={this.props.girl} saveGirl={this.saveGirl} /> }
             </div>
         );
     }
 }
 
 function mapStateToProps(state, props) {
-    return { girl: null }
-    
-  /*if (this.props.match.params._id) {
+  if (props.match.params._id) {
+      
     return {
-      girl: state.girls.find(item => item._id === match.params._id)
+      girl: state.girls.find(item => item._id === props.match.params._id)
     }
+  } else {
+    return { girl: null }    
   }
-  return { girl: null }*/
+  
 }
 
-export default connect(mapStateToProps, { fetchGirl, saveGirl })(Detail);
+export default connect(mapStateToProps, { fetchGirl, saveGirl, updateGirl })(Detail);
+
