@@ -10,10 +10,6 @@ class List extends React.Component {
     componentDidMount() {
     this.props.fetchGirls();
     }
-    
-    componentWillReceive() {
-        //console.log(this.props.copyGirl);
-    }
 
     render() {
         
@@ -31,7 +27,6 @@ class List extends React.Component {
             
             <div>
                 <div>
-                {console.log(this.props.copyGirl)}
                 { !!this.props.girls ? gamesList : emptyMessage }
                 </div>
             </div>    

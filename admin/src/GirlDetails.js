@@ -15,8 +15,18 @@ class GirlDetails extends React.Component {
         loading: false,
     }
 
-    
+    componentDidMount () {
+        
+        if (this.state._id) {
+            this.setState({pageTitle: 'Edit Girl'})    
+        } else {
+            this.setState({pageTitle: 'Add New Girl'})
+        }
+        
+    }
+
     componentWillReceiveProps = (nextProps) => {
+        console.log(this.state)
      this.setState({
        _id: nextProps.girl._id,
        name: nextProps.girl.name,
@@ -26,6 +36,7 @@ class GirlDetails extends React.Component {
      });
     }
 
+
     handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
         
@@ -33,20 +44,26 @@ class GirlDetails extends React.Component {
     
     handleSubmit = (e) => {
         e.preventDefault();
+        // Grab all info in girls
         const { _id, name, country, city, cover } = this.state;
-        this.props.saveGirl({ _id, name, country, city, cover }).then(() => console.log('successfully updated'))
-        /*const { _id, name, country, city, cover } = this.state;
-        this.setState({ loading:true});
-        console.log(this.props)
-        this.props.saveGirl({ _id, name, country, city, cover }).catch((err) => err.json().then(({errors}) => this.setState(  { errors, loading: false })).then(() => console.log('girls details page' + saveGirl))
-        )*/
+        // save it into saveGirl in actions as an object
+        if (_id) {
+            this.props.saveGirl({ _id, name, country, city, cover }).catch((err) => err.json().then(({errors}) => this.setState(  { errors, loading: false }))
+            )    
+        } else {
+            this.props.saveGirl({ name, country, city, cover }).catch((err) => err.json().then(({errors}) => this.setState(  { errors, loading: false }))
+            )
+        }
         
+        // Set loading state
+        this.setState({ loading:true });
     }
     
     render() {
-        const renderForm = (
+        return (
+            <div id="details">
             <form className={classnames( { loading: this.state.loading } ) } onSubmit={this.handleSubmit}>
-                <h1>Add New Girl</h1>
+                <h1>{ this.state.pageTitle }</h1>
                 
                 {!!this.state.errors && <div className="bg-danger text-danger"><p>{this.state.errors}</p></div>}
                 
@@ -90,14 +107,6 @@ class GirlDetails extends React.Component {
                 </div>
                 <button type="submit" className="btn btn-default">Save</button>
             </form>
-        );
-        
-        
-        
-        return (
-            
-            <div>
-            { renderForm }
             </div>
         );
     }

@@ -1,26 +1,16 @@
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+TODO LIST
+
+- Make app work in new dev workspace
+- createdAt and modifiedAt dates
+- Visibility filters by city and country (CRUD + AJAX? REDUX?)
+- Improve list.js layout (switch back to Semantic?) take into account 100s of girls entries
+- Fix validation
+- Implement client validation
+- Create website to feed data
+- Sever rendering SEO 
 
 
-Hi there! Welcome to Cloud9 IDE!
+FUTURE ENHANCEMENTS
 
-To get you started, we included a small hello world application.
-
-1) Open the hello-world.html file
-
-2) Click on the Preview button to open a live preview pane
-
-3) Make some changes to the file, save, watch the preview, and have fun!
-
-Happy coding!
-The Cloud9 IDE team
-
-
-## Support & Documentation
-
-Visit http://docs.c9.io for documentation, or http://support.c9.io for support.
-To watch some training videos, visit http://www.youtube.com/user/c9ide
+- automation: connect with VK and Facebook API for data source 
+- Find a way to group form object for future complex detail pages
