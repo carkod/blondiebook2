@@ -65,11 +65,11 @@ mongodb.MongoClient.connect(dbUrl, function(dbError,db) {
             res.status(400).json(errors);
             
         } else {
-            const { name, city, country, cover } = req.body;
+            const { name, city, country, cover, modifiedAt } = req.body;
             
             db.collection('girls').findOneAndUpdate(
                 { _id: new mongodb.ObjectId(req.params._id) },
-                { $set: { name, city, country, cover } },
+                { $set: { name, city, country, cover, modifiedAt } },
                 { returnNewDocument: true },
                 (errata, outcome) => {
                     

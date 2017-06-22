@@ -1,6 +1,11 @@
 /* eslint-disable */
 import React from 'react';
 import classnames from 'classnames';
+import moment from 'moment';
+
+const today = new Date();
+const formatDate = 'D-M-YYYY';
+const currentDate = moment(today).format(formatDate);
 
 class GirlDetails extends React.Component {
     
@@ -10,29 +15,39 @@ class GirlDetails extends React.Component {
         city: this.props.girl ? this.props.girl.city : '',
         country: this.props.girl ? this.props.girl.country : '',
         cover: this.props.girl ? this.props.girl.cover : '',
-        hide: this.props.girl ? this.props.hide : false,
+        hide: this.props.girl ? this.props.girl.hide : false,
+        createdAt: this.props.girl ? this.props.girl.createdAt : '',
+        modifiedAt: this.props.girl ? this.props.girl.modifiedAt : '',
         errors:[],
         loading: false,
     }
 
     componentDidMount () {
-        
         if (this.state._id) {
-            this.setState({pageTitle: 'Edit Girl'})    
+            this.setState({
+                pageTitle: 'Edit Girl',
+                modifiedAt: currentDate,
+                
+            })    
         } else {
-            this.setState({pageTitle: 'Add New Girl'})
+            this.setState({
+                pageTitle: 'Add New Girl',
+                createdAt: currentDate,
+                modifiedAt: currentDate,
+            });
         }
         
     }
 
     componentWillReceiveProps = (nextProps) => {
-        console.log(this.state)
      this.setState({
        _id: nextProps.girl._id,
        name: nextProps.girl.name,
        country: nextProps.girl.country,
        city: nextProps.girl.city,
        cover: nextProps.girl.cover,
+       createdAt: nextProps.girl.createdAt,
+       modifiedAt: nextProps.girl.modifiedAt,
      });
     }
 
@@ -45,14 +60,15 @@ class GirlDetails extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
         // Grab all info in girls
-        const { _id, name, country, city, cover } = this.state;
+        const { _id, name, country, city, cover, createdAt, modifiedAt } = this.state;
         // save it into saveGirl in actions as an object
         if (_id) {
-            this.props.saveGirl({ _id, name, country, city, cover }).catch((err) => err.json().then(({errors}) => this.setState(  { errors, loading: false }))
+            //if edit girl
+            this.props.saveGirl({ _id, name, country, city, cover, modifiedAt }).catch((err) => err.json().then(({errors}) => this.setState(  { errors, loading: false }))
             )    
         } else {
-            this.props.saveGirl({ name, country, city, cover }).catch((err) => err.json().then(({errors}) => this.setState(  { errors, loading: false }))
-            )
+            //if new girl
+            this.props.saveGirl({ name, country, city, cover, createdAt, modifiedAt }).then(({errors}) => this.setState(  { errors, loading: false }))
         }
         
         // Set loading state
@@ -62,9 +78,14 @@ class GirlDetails extends React.Component {
     render() {
         return (
             <div id="details">
+            <h1>{ this.state.pageTitle }</h1>
+            
             <form className={classnames( { loading: this.state.loading } ) } onSubmit={this.handleSubmit}>
-                <h1>{ this.state.pageTitle }</h1>
                 
+                <p>Created: {this.state.createdAt}</p>
+            <p>Last Modified: {this.state.modifiedAt}</p>
+            
+                    
                 {!!this.state.errors && <div className="bg-danger text-danger"><p>{this.state.errors}</p></div>}
                 
                 <div id="nomeclature" className="form-group">

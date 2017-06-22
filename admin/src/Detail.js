@@ -20,14 +20,14 @@ class Detail extends React.Component {
      
     }
     
-    saveGirl = ({ _id, name, cover, country, city }) =>  {
+    saveGirl = ({ _id, name, cover, country, city, createdAt, modifiedAt }) =>  {
     if(_id) {
-        return this.props.updateGirl({ _id, name, cover, country, city }).then(
+        return this.props.updateGirl({ _id, name, cover, country, city, modifiedAt }).then(
             () => { this.setState({ done: true })}
         )
         } else {
             
-        return this.props.saveGirl({ name, cover, country, city }).then(
+        return this.props.saveGirl({ name, cover, country, city, createdAt, modifiedAt }).then(
             () => { this.setState({ done: true })}
                 
             );

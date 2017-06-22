@@ -6,9 +6,9 @@ export function Create (req, res, db) {
     *   If param is optional, remove checBody second argument -> checkBody('city')
     *   If param is optional but needs to check second validation -> optional({ checkFalsy: true })
     */
-    req.checkBody('name', 'Invalid name field').notEmpty().withMessage('Name required').matches(/^[a-z0-9 ]+$/i).withMessage('Name has to be alphabetic');
-    req.checkBody('city').optional({ checkFalsy: true }).matches(/^[a-z0-9 ]+$/i).withMessage('City must be alphabetic');
-    req.checkBody('country').optional({ checkFalsy: true }).matches(/^[a-z0-9 ]+$/i).withMessage('Country must be alphabetic');
+    req.checkBody('name', 'Invalid name field').notEmpty().withMessage('Name required');
+    req.checkBody('city').optional({ checkFalsy: true });
+    req.checkBody('country').optional({ checkFalsy: true });
     req.checkBody('cover', 'Invalid URL field').notEmpty().withMessage('URL is required').isURL().withMessage('URL format is wrong');
     
     
@@ -23,8 +23,8 @@ export function Create (req, res, db) {
             
         } else {
             
-            const { name, city, country, cover} = req.body;
-            db.collection('girls').insert({ name, city, country, cover }, (err, result) => {
+            const { name, city, country, cover, createdAt, modifiedAt } = req.body;
+            db.collection('girls').insert({ name, city, country, cover, createdAt, modifiedAt }, (err, result) => {
                 console.log('inserted to db')
                 if (err) {
                   res.status(500).json({ errors: { global: "Something went wrong" }});
