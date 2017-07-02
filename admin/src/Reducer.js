@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import { SET_GIRLS, ADD_GIRL, GIRL_FETCHED, GIRL_UPDATED, GIRL_DELETED, GIRL_PASTED } from './actions';
 
+
 function girls (state = [], action = {} ){
     switch(action.type) {
         case SET_GIRLS:
@@ -16,7 +17,8 @@ function girls (state = [], action = {} ){
         case GIRL_PASTED:
               return [
             ...state,
-            action.girl]
+            action.girl
+            ]
             
         case GIRL_UPDATED:
           return state.map(item => {
@@ -43,5 +45,5 @@ function girls (state = [], action = {} ){
 }
 
 export default combineReducers({
-    girls
+    girls,
 });

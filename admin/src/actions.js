@@ -5,6 +5,7 @@ export const GIRL_FETCHED = 'GIRL_FETCHED';
 export const GIRL_UPDATED = 'GIRL_UPDATED';
 export const GIRL_DELETED = 'GIRL_DELETED';
 export const GIRL_PASTED = 'GIRL_PASTED';
+export const UPDATE_LIST = 'UPDATE_LIST';
 
 function handleResponse(response) {
     if (response.ok) {
@@ -59,6 +60,12 @@ export function girlPasted(girl) {
     }
 }
 
+export function updateList(girls) {
+    return {
+        type: UPDATE_LIST,
+        girls
+    }
+}
 
 export function deleteGirl(id) {
     return dispatch => {
@@ -125,5 +132,13 @@ export function fetchGirl(id) {
      fetch(`/db/girls/${id}`)
        .then(res => res.json())
        .then(data => dispatch(girlFetched(data.girl)));
+   }
+ }
+ 
+export function filterGirls(id) {
+   return dispatch => {
+     fetch(`/db/girls/${id}`)
+       .then(res => res.json())
+       .then(data => dispatch(girlFiltered(data.girl)));
    }
  }

@@ -8,6 +8,8 @@ const app = express();
 const dbName = 'vkgirls';
 const dbUrl = 'mongodb://localhost:27017/' + dbName;
 
+const PORT = 8081;
+
 // Functions
 import { Create } from './components/create.js';
 import { Validation } from './validation.js';
@@ -118,7 +120,7 @@ mongodb.MongoClient.connect(dbUrl, function(dbError,db) {
     });
   
     
-    const PORT = 8080;
+    
    app.listen(PORT, () => console.log('Server is running on localhost:' + PORT)); 
    
     } else { console.log('database error, check server.js Mongo connect') }

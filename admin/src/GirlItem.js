@@ -5,19 +5,21 @@ import { Link } from 'react-router-dom';
 
 export default function GirlItem({ girl, deleteGirl, copyGirl }) {
     
-    const { name, city, country, cover } = girl;
+    const { _id, name, city, country, cover, createdAt, modifiedAt } = girl;
     
     return(
-        <div className="col-md-4">
+        <div className="col-md-3">
         <div className="thumbnail">
-        {!!girl.cover ? <img src={girl.cover} alt={girl.name} className="img-responsive img-rounded"/> : '' }
+        {!!cover ? <img src={cover} alt={name} className="img-responsive img-rounded"/> : '' }
         <div className="caption">
-            <h2>{ girl.name }</h2>
-            <p><small>{ girl.city }</small>, { girl.country }</p>
+            <h2>{ name }</h2>
+            <p className="well well-sm"><small className="glyphicon glyphicon-time">Created: { createdAt } &middot; Last modified: { modifiedAt }</small></p>
+
+            <p><strong>{ city }</strong>, { country }</p>
             <p>
-                <Link to={`/bk/${girl._id}`} className="btn btn-primary" role="button">Edit</Link>
+                <Link to={`/bk/${_id}`} className="btn btn-primary" role="button">Edit</Link>
                 &nbsp;
-                <a className="btn btn-danger" role="button" onClick={() => deleteGirl(girl._id)}>Delete</a>
+                <a className="btn btn-danger" role="button" onClick={() => deleteGirl(_id)}>Delete</a>
                 &nbsp;
                 <a onClick={() => copyGirl(girl)} className="btn btn-warning" role="button">Copy</a>
             </p>

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { fetchGirl, saveGirl, updateGirl } from './actions';
+import { updateList, fetchGirl, saveGirl, updateGirl } from './actions';
 
 import GirlDetails from './GirlDetails.js';
 
