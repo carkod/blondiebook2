@@ -9,8 +9,8 @@ const countriesbyiso = isoCountries.countries;
 class Filters extends React.Component {
 
     state = {
-        countryFilter: this.state ? this.state.countryFilter : '',
-        sort: this.state ? this.state.sort : '',
+        countryFilter: this.state ? this.state.countryFilter : null ,
+        sort: this.state ? this.state.sortBy : null ,
     }
     
     /*filterChange = (e) => {
@@ -24,7 +24,7 @@ class Filters extends React.Component {
         
         const field = e.target.name;
         const value = e.target.value;
-        this.props.filters(field, value);        
+        this.props.filters(field, value);     
     }
     
    
@@ -39,19 +39,17 @@ class Filters extends React.Component {
         </div>
         
         <div className="col-md-6">
-            <div className="form-group">
-              <select name="countryFilter" value={this.state.value} onChange={this.handleChange} className="form-control" id="country">
-                <option key={0} value="nofilter">No Filter</option>
-                    {
-                      Object.keys(countriesbyiso).map((country, i) => {
-                      return (
-                      <option key={country} value={countriesbyiso[country].name}>{countriesbyiso[country].name}</option> )
-                      
-                    })  
-                    }
-              
-              </select>
-            </div>
+          <select name="countryFilter" value={this.state.value} onChange={this.handleChange} className="form-control" id="country">
+            <option key={0} value={null}>No Filter</option>
+                {
+                  Object.keys(countriesbyiso).map((country, i) => {
+                  return (
+                  <option key={country} value={countriesbyiso[country].name}>{countriesbyiso[country].name}</option> )
+                  
+                })  
+                }
+          
+          </select>
         </div>
     </div>
     <div className="col-md-4">
