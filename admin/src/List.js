@@ -91,12 +91,12 @@ class List extends React.Component {
             {console.log(this.props.girls)}
             <Filters filters={this.handleChange} />
                 { girlsList }
+            <div className="clearfix" />
             <Pagination />
             </div>
         )
     }
 }
-
 List.propTypes = {
     girls: React.PropTypes.array.isRequired,
     fetchGirls: React.PropTypes.func.isRequired,
