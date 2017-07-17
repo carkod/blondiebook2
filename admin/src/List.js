@@ -11,6 +11,7 @@ class List extends React.Component {
     state = {
         countryFilter: !!this.state ? this.state.countryFilter : null,
         sortBy: this.state ? this.state.sortBy : null,
+        pageItem: this.props.params
     }
     
     
@@ -21,6 +22,7 @@ class List extends React.Component {
     
     componentDidMount() {
         this.props.fetchGirls();
+        console.log(this.props.match)
     }
     
     render() {
@@ -88,11 +90,10 @@ class List extends React.Component {
         
         return (
             <div id="girlsList" className="row">
-            {console.log(this.props.girls)}
             <Filters filters={this.handleChange} />
                 { girlsList }
             <div className="clearfix" />
-            <Pagination />
+            <Pagination girls={this.props.girls} query={this.props.match.params}/>
             </div>
         )
     }
