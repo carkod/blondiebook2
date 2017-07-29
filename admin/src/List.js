@@ -11,7 +11,13 @@ class List extends React.Component {
     state = {
         countryFilter: !!this.state ? this.state.countryFilter : null,
         sortBy: this.state ? this.state.sortBy : null,
-        pageItem: this.props.params
+        pageItem: this.props.params,
+        pageOfItems: {},
+    }
+    
+    onChangePage = (pageOfItems) => {
+        // update state with new page of items
+        this.setState({ pageOfItems: pageOfItems });
     }
     
     
@@ -22,11 +28,13 @@ class List extends React.Component {
     
     componentDidMount() {
         this.props.fetchGirls();
-        console.log(this.props.match)
+        this.setState({
+            pageOfItems: this.state.pageOfItems ? this.state.pageOfItems : this.props.girlsList,
+        })
     }
     
     render() {
-   
+        
         const filteredGirls = this.props.girls.filter(girl => {
             if ( !!this.state.countryFilter ) {
                 return (girl.country === this.state.countryFilter)
@@ -93,7 +101,7 @@ class List extends React.Component {
             <Filters filters={this.handleChange} />
                 { girlsList }
             <div className="clearfix" />
-            <Pagination girls={this.props.girls} query={this.props.match.params}/>
+            { !!this.props.girls ? <Pagination girls={this.props.girls} query={this.props.match.params} onChangePage={this.onChangePage}/> : ''}
             </div>
         )
     }
