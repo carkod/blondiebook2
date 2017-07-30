@@ -12,16 +12,10 @@ class Filters extends React.Component {
         countryFilter: this.state ? this.state.countryFilter : null ,
         sort: this.state ? this.state.sortBy : null ,
     }
-    
-    /*filterChange = (e) => {
-        this.setState({
-           [e.target.name] : e.target.value, 
-        });
-        this.props.filterHandler(e.target.value)        
-    }*/
+
 
     handleChange = (e) => {
-        
+        console.log('filters.js changed')
         const field = e.target.name;
         const value = e.target.value;
         this.props.filters(field, value);     

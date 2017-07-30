@@ -10,11 +10,11 @@ class List extends React.Component {
     
     state = {
         countryFilter: !!this.state ? this.state.countryFilter : null,
-        sortBy: this.state ? this.state.sortBy : null,
+        sortBy: this.state ? this.state.sortBy : 'name',
         pageItem: this.props.params,
-        pageOfItems: {},
+        pageOfItems: [],
     }
-    
+  
     onChangePage = (pageOfItems) => {
         // update state with new page of items
         this.setState({ pageOfItems: pageOfItems });
@@ -22,20 +22,20 @@ class List extends React.Component {
     
     
     handleChange = (field, value) => {
-        this.setState({ [field]: value,
-       });
+        console.log(field + value)
+        this.setState({ [field]: value });
     }
     
-    componentDidMount() {
+    componentWillMount = () => {
         this.props.fetchGirls();
-        this.setState({
-            pageOfItems: this.state.pageOfItems ? this.state.pageOfItems : this.props.girlsList,
-        })
+        
     }
     
     render() {
+    
+        var items = this.state.pageOfItems ? this.state.pageOfItems : this.props.girls.slice(0, 5);
         
-        const filteredGirls = this.props.girls.filter(girl => {
+        let filteredGirls = items.filter(girl => {
             if ( !!this.state.countryFilter ) {
                 return (girl.country === this.state.countryFilter)
             } else {
@@ -44,33 +44,33 @@ class List extends React.Component {
             
         });
      
-        const sortedGirls = filteredGirls.sort((a,b) => { 
-                switch ( this.state.sortBy ) {
-                    case "name" :
-                        const nameA = a.name.replace(/\s+/g, '').trim().toUpperCase();
-                        const nameB = b.name.replace(/\s+/g, '').trim().toUpperCase();    
-                        if (nameA < nameB) { return -1; } else if (nameA > nameB) { return 1; } else {return 0;}
-                        break;
-                    case "createdDesc" :
-                        if (a.createdAt > b.createdAt) { return -1; } else if (a.createdAt < b.createdAt) { return 1; } else {return 0;}
-                        break;
-                    case "createdAsc" :
-                        if (a.createdAt < b.createdAt) { return -1; } else if (a.createdAt > b.createdAt) { return 1; } else {return 0;}
-                        break;
-                    case "modifiedDesc" :
-                        if (a.modifiedAt > b.modifiedAt) { return -1; } else if (a.modifiedAt < b.modifiedAt) { return 1; } else {return 0;}
-                        break;
-                    case "modifiedAsc" :
-                        if (a.modifiedAt < b.modifiedAt) { return -1; } else if (a.modifiedAt > b.modifiedAt) { return 1; } else {return 0;}
-                        break;
-                    default:
-                        return filteredGirls;
+        let sortedGirls = filteredGirls.sort((a,b) => { 
+            switch ( this.state.sortBy ) {
+                case "name" :
+                    console.log(a.name)
+                    const nameA = a.name.replace(/\s+/g, '').trim().toUpperCase();
+                    const nameB = b.name.replace(/\s+/g, '').trim().toUpperCase();    
+                    if (nameA < nameB) { return -1; } else if (nameA > nameB) { return 1; } else {return 0;}
+                    break;
+                case "createdDesc" :
+                    if (a.createdAt > b.createdAt) { return -1; } else if (a.createdAt < b.createdAt) { return 1; } else {return 0;}
+                    break;
+                case "createdAsc" :
+                    if (a.createdAt < b.createdAt) { return -1; } else if (a.createdAt > b.createdAt) { return 1; } else {return 0;}
+                    break;
+                case "modifiedDesc" :
+                    if (a.modifiedAt > b.modifiedAt) { return -1; } else if (a.modifiedAt < b.modifiedAt) { return 1; } else {return 0;}
+                    break;
+                case "modifiedAsc" :
+                    if (a.modifiedAt < b.modifiedAt) { return -1; } else if (a.modifiedAt > b.modifiedAt) { return 1; } else {return 0;}
+                    break;
+                default:
+                    return filteredGirls;
                             
             }
             
         });
-     
-     
+        
         const girlsList = (
             <div>
                 {sortedGirls.map((girl) => <GirlItem girl={girl} key={girl._id} deleteGirl={ this.props.deleteGirl } copyGirl={this.props.copyGirl} />)}
@@ -86,24 +86,25 @@ class List extends React.Component {
                     </div>
                 </div>
             );
-        } 
-        
-        if (!filteredGirls){
+        } else if (!filteredGirls) {
             return (
                 <div className="alert alert-info" role="alert">
                     Girls cannot be filtered
                 </div>
             );
-        } 
+        } else {
         
-        return (
-            <div id="girlsList" className="row">
-            <Filters filters={this.handleChange} />
-                { girlsList }
-            <div className="clearfix" />
-            { !!this.props.girls ? <Pagination girls={this.props.girls} query={this.props.match.params} onChangePage={this.onChangePage}/> : ''}
-            </div>
-        )
+            return (
+                <div id="girlsList" className="row">
+                <Filters filters={this.handleChange} />
+                <Pagination girls={this.props.girls} onChangePage={this.onChangePage} onLoad={this.initialPaging} />
+                    { girlsList }
+                <div className="clearfix" />
+                <Pagination girls={this.props.girls} onChangePage={this.onChangePage} onLoad={this.initialPaging} />
+                </div>
+            )
+            
+        }
     }
 }
 List.propTypes = {

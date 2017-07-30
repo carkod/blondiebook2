@@ -1,8 +1,7 @@
 /* eslint-disable */
 import React from 'react';
-import { fetchGirls, deleteGirl, copyGirl } from './actions';
 
-const pageSize = 5;
+const pageSize = 8;
 
 class Pagination extends React.Component {
 
@@ -11,6 +10,7 @@ class Pagination extends React.Component {
         initialPage: 1,
         pager: {},
     } 
+    
     
     setPage(page) {
         const items = this.props.girls ? this.props.girls : '';
@@ -26,7 +26,7 @@ class Pagination extends React.Component {
  
         // get new page of items from items array
         var pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
- 
+        
         // update state
         this.setState({ pager: pager });
  
@@ -51,9 +51,9 @@ class Pagination extends React.Component {
             startPage = 1;
             endPage = totalPages;
         } else {
-            if (currentPage <= 6) {
+            if (currentPage <= totalPages ) {
                 startPage = 1;
-                endPage = 10;
+                endPage = totalPages;
             } else if (currentPage + 4 >= totalPages) {
                 startPage = totalPages - 9;
                 endPage = totalPages;
@@ -70,7 +70,11 @@ class Pagination extends React.Component {
         // create an array of pages to ng-repeat in the pager control
         //var pages = _.range(startPage, endPage + 1);
  
-        var pages = Array.from(Array(endPage + 1), (_,i) => startPage + i)
+        //var pages = Array.from(Array(endPage + 1), (_,i) => startPage + i)
+ 
+        var pages = Array.from({length: (endPage + 1) - startPage}, (v,i) => i + 1);
+        
+        var test = (endPage + 1) - startPage;
  
         // return object with all pager properties required by the view
         return {
@@ -82,47 +86,57 @@ class Pagination extends React.Component {
             endPage: endPage,
             startIndex: startIndex,
             endIndex: endIndex,
-            pages: pages
+            pages: pages,
+            test: test,
         };
     }
- 
+
+   
     componentDidMount = () => {
-        this.setPage(this.state.initialPage);
+        
+        if (this.props.girls && this.props.girls.length) {
+            this.setPage(this.state.initialPage);    
+        }
     }
     
-    componentDidUpdate = () => {
-        //console.log(this.props)
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.props.girls !== prevProps.girls) {
+            this.setPage(this.state.initialPage);
+        }
     }
         
     render() {
         const pager = !!this.state.pager ? this.state.pager : '';
         const items = this.props.girls;
-   
+        
         return (
-            <div id="pagination" className="row">
-                <ul className="pagination-list">
-                    <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-                        <a onClick={() => this.setPage(1)}>First</a>
-                    </li>
-                    <li className={pager.currentPage === 1 ? 'disabled' : ''}>
-                        <a onClick={() => this.setPage(pager.currentPage - 1)}>Previous</a>
-                    </li>
-                    {/*pager.pages.map((page, index) =>
-                        <li key={index} className={pager.currentPage === page ? 'active' : ''}>
-                            <a onClick={() => this.setPage(page)}>{page}</a>
+            <div className="container">
+                <div id="paging" className="row">
+                    <ul className="pagination-list pagination">
+                        <li className={pager.currentPage === 1 ? 'disabled' : ''}>
+                            <a onClick={() => this.setPage(1)}>First</a>
                         </li>
-                    )*/}
-                    <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
-                        <a onClick={() => this.setPage(pager.currentPage + 1)}>Next</a>
-                    </li>
-                    <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
-                        <a onClick={() => this.setPage(pager.totalPages)}>Last</a>
-                    </li>
-                </ul>
+                        <li className={pager.currentPage === 1 ? 'disabled' : ''}>
+                            <a onClick={() => this.setPage(pager.currentPage - 1)}>&laquo;</a>
+                        </li>
+
+                        { pager.pages ? pager.pages.map((page, index) =>
+                            <li key={index} className={pager.currentPage === page ? 'active' : ''}>
+                                <a onClick={() => this.setPage(page)}>{page}</a>
+                            </li>
+                        ) : ''}
+                        <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
+                            <a onClick={() => this.setPage(pager.currentPage + 1)}>&raquo;</a>
+                        </li>
+                        <li className={pager.currentPage === pager.totalPages ? 'disabled' : ''}>
+                            <a onClick={() => this.setPage(pager.totalPages)}>Last</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         )
     }
 }
 
-export default Pagination;
 
+export default Pagination;
